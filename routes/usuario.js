@@ -168,4 +168,5 @@ app.delete('/:id', (req, res) => {
 });
 
 
+// Lo exporto para ser usado en app.js
 module.exports = app;
