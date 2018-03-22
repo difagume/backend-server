@@ -4,6 +4,9 @@ var app = express();
 
 var Usuario = require('../models/usuario');
 
+//=============================
+// Obtener todos los usuarios
+//=============================
 app.get('/', (req, res, next) => {
 
     Usuario.find({}, 'nombre email img role')
@@ -24,5 +27,44 @@ app.get('/', (req, res, next) => {
                 });
             })
 });
+
+
+//=============================
+// Crear un nuevo usuario
+//=============================
+app.post('/', (req, res) => {
+
+    // Extraemos el body
+    var body = req.body; // <-- usando el Body parser
+
+    // Creamos un objeto de tipo Usuario
+    var usuario = new Usuario({
+        nombre: body.nombre,
+        email: body.email,
+        password: body.password,
+        img: body.img,
+        role: body.role
+    });
+
+    // Para guardar
+    usuario.save((err, usuarioGuardado) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al crear usuario',
+                errors: err
+            });
+        }
+
+        // Si no sucede ningun error
+        res.status(201).json({
+            ok: true,
+            usuario: usuarioGuardado
+        });
+
+    });
+});
+
 
 module.exports = app;
