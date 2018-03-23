@@ -1,5 +1,8 @@
 var express = require('express');
 var bcrypt = require('bcryptjs'); // https://github.com/dcodeIO/bcrypt.js
+var jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
+
+var SEED = require('../config/config').SEED;
 
 var app = express();
 
@@ -27,6 +30,34 @@ app.get('/', (req, res, next) => {
                     usuarios: usuarios
                 });
             })
+});
+
+
+//==============================================
+// Verificar token
+//==============================================
+// (Va a trabajar desde aquí hacia abajo)
+// es decir el método get no va a ser validado
+// pero el resto de métodos si.
+//==============================================
+app.use('/', (req, res, next) => {
+
+    var token = req.query.token;
+
+    jwt.verify(token, SEED, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                mensaje: 'Token incorrecto',
+                errors: err
+            });
+        }
+
+        next(); // le permite continuar con las siguientes funciones que se encuentren abajo
+
+    });
+
 });
 
 
