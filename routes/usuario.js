@@ -2,7 +2,7 @@ var express = require('express');
 var bcrypt = require('bcryptjs'); // https://github.com/dcodeIO/bcrypt.js
 var jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
 
-var SEED = require('../config/config').SEED;
+var mdAutenticacion = require('../middlewares/autenticacion');
 
 var app = express();
 
@@ -33,38 +33,10 @@ app.get('/', (req, res, next) => {
 });
 
 
-//==============================================
-// Verificar token
-//==============================================
-// (Va a trabajar desde aquí hacia abajo)
-// es decir el método get no va a ser validado
-// pero el resto de métodos si.
-//==============================================
-app.use('/', (req, res, next) => {
-
-    var token = req.query.token;
-
-    jwt.verify(token, SEED, (err, decoded) => {
-
-        if (err) {
-            return res.status(401).json({
-                ok: false,
-                mensaje: 'Token incorrecto',
-                errors: err
-            });
-        }
-
-        next(); // le permite continuar con las siguientes funciones que se encuentren abajo
-
-    });
-
-});
-
-
 //=============================
 // Crear un nuevo usuario
 //=============================
-app.post('/', (req, res) => {
+app.post('/', mdAutenticacion.verficaToken, (req, res) => {
 
     // Extraemos el body
     var body = req.body; // <-- usando el Body parser
@@ -92,7 +64,8 @@ app.post('/', (req, res) => {
         // Si no sucede ningun error
         res.status(201).json({
             ok: true,
-            usuario: usuarioGuardado
+            usuario: usuarioGuardado,
+            usuarioToken: req.usuario
         });
 
     });
@@ -102,7 +75,7 @@ app.post('/', (req, res) => {
 //=============================
 // Actualizar usuario
 //=============================
-app.put('/:id', (req, res) => {
+app.put('/:id', mdAutenticacion.verficaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
@@ -153,7 +126,8 @@ app.put('/:id', (req, res) => {
             // Si no sucede ningun error
             res.status(200).json({
                 ok: true,
-                usuario: usuarioGuardado
+                usuario: usuarioGuardado,
+                usuarioToken: req.usuario
             });
 
         });
@@ -166,7 +140,7 @@ app.put('/:id', (req, res) => {
 //==============================
 // Borrar un usuario por el id
 //==============================
-app.delete('/:id', (req, res) => {
+app.delete('/:id', mdAutenticacion.verficaToken, (req, res) => {
 
     var id = req.params.id;
 
@@ -191,7 +165,8 @@ app.delete('/:id', (req, res) => {
 
         res.status(200).json({
             ok: true,
-            usuario: usuarioBorrado
+            usuario: usuarioBorrado,
+            usuarioToken: req.usuario
         });
 
     })
