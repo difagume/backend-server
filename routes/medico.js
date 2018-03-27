@@ -12,6 +12,8 @@ var Medico = require('../models/medico');
 app.get('/', (req, res, next) => {
 
     Medico.find({})
+        .populate('usuario', 'nombre email')
+        .populate('hospital')
         .exec(
             (err, medicos) => {
 
