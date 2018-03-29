@@ -29,6 +29,13 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, res) =
 
 })
 
+// Server index config --> https://github.com/expressjs/serve-index
+// Permite ver los directorios y losarchivos desde el navegador
+// En este caso sería de entrar a: http://localhost:3000/uploads/
+/* var serveIndex = require('serve-index');
+app.use(express.static(__dirname + '/'))
+app.use('/uploads', serveIndex(__dirname + '/uploads')); */
+
 
 // Rutas
 app.use('/medico', medicoRoutes);
