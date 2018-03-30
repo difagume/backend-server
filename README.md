@@ -13,5 +13,9 @@ Para arrancar el servidor ejecutar
 npm start
 ```
 
+Info del uso de Google Sign-In for Websites
+https://developers.google.com/identity/sign-in/web/backend-auth
+
+
 ## Dentro de Google-Signin-demo
 Existe un pequeño ejercicio para probar la autenticación de Google en un Front-End básico pero funcional.
