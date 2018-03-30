@@ -1,4 +1,5 @@
 module.exports.SEED = 'este-es-un-seed-dificil';
+module.exports.CADUCIDAD_TOKEN = 14400; // 4 horas
 
 // Google
 module.exports.GOOGLE_CLIENT_ID = '458229930749-sr6sma82ppdcr8546mn3qtilsuqbb7a7.apps.googleusercontent.com';
