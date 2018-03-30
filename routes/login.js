@@ -130,7 +130,7 @@ app.post('/', (req, res) => {
         // Crear un token (en este punto el correo y el password ya son correctos)
         usuarioBD.password = ':D';
 
-        var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 }); // 4 horas
+        var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: CADUCIDAD_TOKEN });
 
         res.status(200).json({
             ok: true,
