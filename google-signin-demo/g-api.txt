@@ -1,0 +1,4 @@
+Client ID
+458229930749-sr6sma82ppdcr8546mn3qtilsuqbb7a7.apps.googleusercontent.com
+Client Secret
+hBIpTc2nEUj21N8QYgPzmbLP
