@@ -50,7 +50,8 @@ app.get('/', (req, res, next) => {
 //=============================
 // Crear un nuevo usuario
 //=============================
-app.post('/', mdAutenticacion.verficaToken, (req, res) => {
+// app.post('/', mdAutenticacion.verficaToken, (req, res) => {
+app.post('/', (req, res) => {
 
     // Extraemos el body
     var body = req.body; // <-- usando el Body parser
