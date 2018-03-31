@@ -60,7 +60,8 @@ app.post('/google', async (req, res) => {
                 return res.json({
                     ok: true,
                     usuario: usuarioDB,
-                    token,
+                    token: token,
+                    id: usuarioDB._id
                 });
             }
         } else {
@@ -84,7 +85,8 @@ app.post('/google', async (req, res) => {
                 return res.json({
                     ok: true,
                     usuario: usuarioDB,
-                    token,
+                    token: token,
+                    id: usuarioDB._id
                 });
             });
         }
