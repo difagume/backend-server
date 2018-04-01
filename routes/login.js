@@ -54,8 +54,6 @@ app.post('/google', async (req, res) => {
                     }
                 });
             } else {
-                console.log('No existe usuario');
-
                 let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
                 return res.json({
                     ok: true,
