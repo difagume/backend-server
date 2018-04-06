@@ -17,7 +17,7 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 //=============================
 // Autenticación de Google
 //=============================
-/* app.post('/google', async (req, res) => {
+app.post('/google', async (req, res) => {
     let token = req.body.token;
     const ticket = await client.verifyIdToken({
         idToken: token,
@@ -30,15 +30,15 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
         });
     })
 
-    const googleUser = ticket.getPayload();*/
+    const googleUser = ticket.getPayload();
 
-/* res.status(200).json({
-    ok: true,
-    ticket: googleUser,
-    email: googleUser.email
-}) */
+    /* res.status(200).json({
+        ok: true,
+        ticket: googleUser,
+        email: googleUser.email
+    }) */
 
-/*Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
+    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -55,11 +55,12 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
                 });
             } else {
                 let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
-                return res.json({
+                return res.status(200).json({
                     ok: true,
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role)
                 });
             }
         } else {
@@ -80,16 +81,17 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
                 let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
                 //var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 }); // 4 horas
 
-                return res.json({
+                return res.status(200).json({
                     ok: true,
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuario.role)
                 });
             });
         }
     });
-}); */
+});
 
 
 //=============================
@@ -136,12 +138,47 @@ app.post('/', (req, res) => {
             ok: true,
             usuario: usuarioBD,
             token: token,
-            id: usuarioBD._id
+            id: usuarioBD._id,
+            menu: obtenerMenu(usuarioBD.role)
         });
 
     });
 
 });
+
+
+function obtenerMenu(ROLE) {
+
+    var menu = [
+        {
+            titulo: 'Principal',
+            icono: 'mdi mdi-gauge', // material design
+            submenu: [
+                { titulo: 'Dashboard', url: '/dashboard' },
+                { titulo: 'ProgressBar', url: '/progress' },
+                { titulo: 'Gráficas', url: '/graficas1' },
+                { titulo: 'Promesas', url: '/promesas' },
+                { titulo: 'RxJs', url: '/rxjs' }
+            ]
+        },
+        {
+            titulo: 'Mantenimientos',
+            icono: 'mdi mdi-folder-lock-open',
+            submenu: [
+                /* { titulo: 'Usuarios', url: '/usuarios' }, */
+                { titulo: 'Hospitales', url: '/hospitales' },
+                { titulo: 'Médicos', url: '/medicos' }
+            ]
+        }
+    ];
+
+    // console.log('ROL: ', ROLE);
+    if (ROLE === 'ADMIN_ROLE') {
+        menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
+    }
+
+    return menu;
+}
 
 
 // Lo exporto para ser usado en app.js
