@@ -115,14 +115,14 @@ app.put('/:id', [mdAutenticacion.verficaToken, mdAutenticacion.verficaAdmin_o_mi
         }
 
         // Actualizo la info del usuario (Opción 1)
-        /*usuario.nombre = body.nombre;
+        usuario.nombre = body.nombre;
         usuario.email = body.email;
-        usuario.role = body.role;*/
+        usuario.role = body.role;
 
-        // Actualizo la info del usuario (Opción 2)
-        Object.keys(req.body).forEach(key => {
-            usuario[key] = req.body[key];
-        });
+        // Actualizo la info del usuario (Opción 2) Nota: revisar xq también actualiza el password
+        /*  Object.keys(req.body).forEach(key => {
+             usuario[key] = req.body[key];
+         }); */
 
         // Grabar la info
         usuario.save((err, usuarioGuardado) => {
