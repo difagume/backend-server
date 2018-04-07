@@ -90,7 +90,7 @@ app.post('/', (req, res) => {
 //=============================
 // Actualizar usuario
 //=============================
-app.put('/:id', [mdAutenticacion.verficaToken, mdAutenticacion.verficaAdminRole], (req, res) => {
+app.put('/:id', [mdAutenticacion.verficaToken, mdAutenticacion.verficaAdmin_o_mismoUsuario], (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
