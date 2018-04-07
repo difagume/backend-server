@@ -14,6 +14,24 @@ const GOOGLE_CLIENT_ID = require('../config/config').GOOGLE_CLIENT_ID;
 // const GOOGLE_SECRET = require('../config/config').GOOGLE_SECRET;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
+var mdAutenticacion = require('../middlewares/autenticacion');
+
+//=============================
+// Renovar token
+//=============================
+app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
+
+    let token = jwt.sign({ usuario: req.usuario }, SEED, { expiresIn: CADUCIDAD_TOKEN });
+
+    return res.status(200).json({
+        ok: true,
+        //usuario: req.usuario,
+        token: token
+    });
+
+});
+
+
 //=============================
 // Autenticación de Google
 //=============================
@@ -25,7 +43,8 @@ app.post('/google', async (req, res) => {
     }).catch(e => {
         return res.status(403).json({
             ok: false,
-            mensaje: 'Token no válido',
+            mensaje: 'Error en el login de Google',
+            errors: { message: 'Token no válido' },
             err: e
         });
     })
@@ -49,9 +68,8 @@ app.post('/google', async (req, res) => {
             if (usuarioDB.google === false) {
                 return res.status(400).json({
                     ok: false,
-                    err: {
-                        message: 'Debe de usar su autenticación normal'
-                    }
+                    mensaje: 'Error en el login de Google',
+                    errors: { message: 'Debe de usar su autenticación normal' }
                 });
             } else {
                 let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
@@ -115,8 +133,8 @@ app.post('/', (req, res) => {
         if (!usuarioBD) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - email',
-                errors: err
+                mensaje: 'Error en el login',
+                errors: { message: 'Credenciales incorrectas - email' }
             });
         }
 
@@ -124,8 +142,8 @@ app.post('/', (req, res) => {
         if (!bcrypt.compareSync(body.password, usuarioBD.password)) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'Credenciales incorrectas - password',
-                errors: err
+                mensaje: 'Error en el login',
+                errors: { message: 'Credenciales incorrectas - password' }
             });
         }
 

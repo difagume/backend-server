@@ -33,7 +33,7 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'El tipo de busqueda es incorrecto',
-                error: { message: 'Tipo de tabla/colección no válido' }
+                errors: { message: 'Tipo de tabla/colección no válido' }
             });
     }
 
