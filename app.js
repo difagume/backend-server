@@ -2,9 +2,12 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+const favicon = require('express-favicon');
 
 // Inicializar variables
 var app = express();
+
+app.use(favicon(__dirname + '/assets/favicon.png'));
 
 // Control de acceso HTTP (CORS)
 app.use(function (req, res, next) {
