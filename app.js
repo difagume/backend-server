@@ -1,4 +1,5 @@
 // Requires (librerias)
+var cool = require('cool-ascii-faces');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -7,7 +8,13 @@ const favicon = require('express-favicon');
 // Inicializar variables
 var app = express();
 
+app.use(express.static(__dirname + '/public'));
+
 app.use(favicon(__dirname + '/public/favicon.png'));
+
+app.get('/cool', function (request, response) {
+    response.send(cool());
+});
 
 // Control de acceso HTTP (CORS)
 app.use(function (req, res, next) {
