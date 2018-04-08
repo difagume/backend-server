@@ -3,26 +3,19 @@ var cool = require('cool-ascii-faces');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-const favicon = require('express-favicon');
+const path = require('path')
+const PORT = process.env.PORT || 5000
 
 // Inicializar variables
 var app = express();
 
-app.use(express.static(__dirname + '/public'));
-
-app.use(favicon(__dirname + '/public/favicon.png'));
-
-app.get('/cool', function (request, response) {
-    response.send(cool());
-});
-
 // Control de acceso HTTP (CORS)
-app.use(function (req, res, next) {
+/* app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
     next();
-});
+}); */
 
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
@@ -58,18 +51,33 @@ app.use('/uploads', serveIndex(__dirname + '/uploads')); */
 
 
 // Rutas
-app.use('/medico', medicoRoutes);
+/* app.use('/medico', medicoRoutes);
 app.use('/hospital', hospitalRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/busqueda', busquedaRoutes);
 app.use('/login', loginRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/img', imagenesRoutes);
-app.use('/', appRoutes);
+app.use('/', appRoutes); */
 
+
+app.use(express.static(path.join(__dirname, 'public')))
+    .use('/medico', medicoRoutes)
+    .use('/hospital', hospitalRoutes)
+    .use('/usuario', usuarioRoutes)
+    .use('/busqueda', busquedaRoutes)
+    .use('/login', loginRoutes)
+    .use('/upload', uploadRoutes)
+    .use('/img', imagenesRoutes)
+    .use('/', appRoutes)
+    .set('views', path.join(__dirname, 'views'))
+    .set('view engine', 'ejs')
+    .get('/', (req, res) => res.render('pages/index'))
+    .get('/cool', (req, res) => res.send(cool()))
+    .listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 // Escuchar peticiones
-app.listen(5000, () => {
+/* app.listen(5000, () => {
     console.log('Express server puerto 5000: \x1b[32m%s\x1b[0m', 'online');
 
-});
+}); */
