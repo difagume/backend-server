@@ -7,7 +7,7 @@ const favicon = require('express-favicon');
 // Inicializar variables
 var app = express();
 
-app.use(favicon(__dirname + '/assets/favicon.png'));
+app.use(favicon(__dirname + '/public/favicon.png'));
 
 // Control de acceso HTTP (CORS)
 app.use(function (req, res, next) {
