@@ -4,7 +4,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 const path = require('path')
-const PORT = process.env.PORT || 5000
+const PUERTO = require('./config/config').PUERTO;
 
 // Inicializar variables
 var app = express();
@@ -74,10 +74,10 @@ app.use(express.static(path.join(__dirname, 'public')))
     .set('view engine', 'ejs')
     .get('/', (req, res) => res.render('pages/index'))
     .get('/cool', (req, res) => res.send(cool()))
-    .listen(PORT, () => console.log(`Listening on ${PORT}`))
+    .listen(PUERTO, () => console.log('Express server escuchando en el puerto ' + PUERTO + ': \x1b[32m%s\x1b[0m', 'online'))
 
 // Escuchar peticiones
-/* app.listen(5000, () => {
+ /* app.listen(5000, () => {
     console.log('Express server puerto 5000: \x1b[32m%s\x1b[0m', 'online');
 
-}); */
+});  */
