@@ -35,7 +35,7 @@ app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
 //=============================
 // Autenticación de Google
 //=============================
-app.post('/google', async (req, res) => {
+/* app.post('/google', async (req, res) => {
     let token = req.body.token;
     const ticket = await client.verifyIdToken({
         idToken: token,
@@ -49,15 +49,15 @@ app.post('/google', async (req, res) => {
         });
     })
 
-    const googleUser = ticket.getPayload();
+    const googleUser = ticket.getPayload(); */
 
-    /* res.status(200).json({
-        ok: true,
-        ticket: googleUser,
-        email: googleUser.email
-    }) */
+/* res.status(200).json({
+    ok: true,
+    ticket: googleUser,
+    email: googleUser.email
+}) */
 
-    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
+/* Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -109,7 +109,7 @@ app.post('/google', async (req, res) => {
             });
         }
     });
-});
+});*/
 
 
 //=============================
@@ -167,8 +167,7 @@ app.post('/', (req, res) => {
 
 function obtenerMenu(ROLE) {
 
-    var menu = [
-        {
+    var menu = [{
             titulo: 'Principal',
             icono: 'mdi mdi-gauge', // material design
             submenu: [
