@@ -35,27 +35,43 @@ app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
 //=============================
 // Autenticación de Google
 //=============================
-app.post('/google', async (req, res) => {
-    let token = req.body.token;
+async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: GOOGLE_CLIENT_ID,
-    }).catch(e => {
-        return res.status(403).json({
-            ok: false,
-            mensaje: 'Error en el login de Google',
-            errors: { message: 'Token no válido' },
-            err: e
-        });
-    })
+        audience: GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
 
-    const googleUser = ticket.getPayload();
+    const payload = ticket.getPayload();
+    // const userid = payload['sub'];
+    // If request specified a G Suite domain:
+    //const domain = payload['hd'];
 
-    /* res.status(200).json({
+    return {
+        nombre: payload.name,
+        email: payload.email,
+        img: payload.picture,
+        google: true
+    }
+}
+app.post('/google', async(req, res) => {
+
+    var token = req.body.token;
+    var googleUser = await verify(token)
+        .catch(e => {
+            return res.status(403).json({
+                ok: false,
+                mensaje: 'Error en el login de Google',
+                errors: { message: 'Token no válido' },
+                err: e
+            });
+        })
+
+    return res.status(200).json({
         ok: true,
-        ticket: googleUser,
-        email: googleUser.email
-    }) */
+        googleUser: googleUser
+    });
 
     Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
         if (err) {
@@ -84,11 +100,13 @@ app.post('/google', async (req, res) => {
         } else {
             // Si el usuario no existe en nuestra base de datos
             let usuario = new Usuario();
-            usuario.nombre = googleUser.name;
+
+            usuario.nombre = googleUser.nombre;
             usuario.email = googleUser.email;
-            usuario.img = googleUser.picture;
+            usuario.img = googleUser.img;
             usuario.google = true;
             usuario.password = ':)';
+
             usuario.save((err, usuarioDB) => {
                 if (err) {
                     return res.status(500).json({
@@ -167,8 +185,7 @@ app.post('/', (req, res) => {
 
 function obtenerMenu(ROLE) {
 
-    var menu = [
-        {
+    var menu = [{
             titulo: 'Principal',
             icono: 'mdi mdi-gauge', // material design
             submenu: [
