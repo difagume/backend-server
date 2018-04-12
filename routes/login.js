@@ -55,7 +55,7 @@ async function verify(token) {
         google: true
     }
 }
-app.post('/google', async(req, res) => {
+app.post('/google', async (req, res) => {
 
     var token = req.body.token;
     var googleUser = await verify(token)
@@ -67,11 +67,6 @@ app.post('/google', async(req, res) => {
                 err: e
             });
         })
-
-    return res.status(200).json({
-        ok: true,
-        googleUser: googleUser
-    });
 
     Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
         if (err) {
@@ -186,25 +181,25 @@ app.post('/', (req, res) => {
 function obtenerMenu(ROLE) {
 
     var menu = [{
-            titulo: 'Principal',
-            icono: 'mdi mdi-gauge', // material design
-            submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' },
-                { titulo: 'ProgressBar', url: '/progress' },
-                { titulo: 'Gráficas', url: '/graficas1' },
-                { titulo: 'Promesas', url: '/promesas' },
-                { titulo: 'RxJs', url: '/rxjs' }
-            ]
-        },
-        {
-            titulo: 'Mantenimientos',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-                /* { titulo: 'Usuarios', url: '/usuarios' }, */
-                { titulo: 'Hospitales', url: '/hospitales' },
-                { titulo: 'Médicos', url: '/medicos' }
-            ]
-        }
+        titulo: 'Principal',
+        icono: 'mdi mdi-gauge', // material design
+        submenu: [
+            { titulo: 'Dashboard', url: '/dashboard' },
+            { titulo: 'ProgressBar', url: '/progress' },
+            { titulo: 'Gráficas', url: '/graficas1' },
+            { titulo: 'Promesas', url: '/promesas' },
+            { titulo: 'RxJs', url: '/rxjs' }
+        ]
+    },
+    {
+        titulo: 'Mantenimientos',
+        icono: 'mdi mdi-folder-lock-open',
+        submenu: [
+            /* { titulo: 'Usuarios', url: '/usuarios' }, */
+            { titulo: 'Hospitales', url: '/hospitales' },
+            { titulo: 'Médicos', url: '/medicos' }
+        ]
+    }
     ];
 
     // console.log('ROL: ', ROLE);
