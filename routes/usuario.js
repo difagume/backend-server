@@ -8,6 +8,40 @@ var app = express();
 
 var Usuario = require('../models/usuario');
 
+
+//=============================
+// Buscar email en usuarios
+//=============================
+app.get('/email/:email', (req, res) => {
+
+    var e = req.params.email;
+
+    Usuario.findOne({ email: e }, 'nombre email img role google', (err, usuario) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error buscando email',
+                errors: err
+            });
+        }
+
+        if (!usuario) {
+
+            return res.status(200).json({
+                ok: true,
+                mensaje: `El correo ${e} no existe`
+            });
+        }
+
+        return res.status(200).json({
+            ok: false,
+            mensaje: 'El correo ya existe'
+                // ,usuario: usuario
+        });
+    })
+});
+
+
 //=============================
 // Obtener todos los usuarios
 //=============================
@@ -38,11 +72,7 @@ app.get('/', (req, res, next) => {
                         usuarios: usuarios,
                         total: conteo
                     });
-
                 })
-
-
-
             })
 });
 
