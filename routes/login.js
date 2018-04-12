@@ -11,7 +11,6 @@ var Usuario = require('../models/usuario');
 
 const { OAuth2Client } = require('google-auth-library');
 const GOOGLE_CLIENT_ID = require('../config/config').GOOGLE_CLIENT_ID;
-// const GOOGLE_SECRET = require('../config/config').GOOGLE_SECRET;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 var mdAutenticacion = require('../middlewares/autenticacion');
@@ -38,9 +37,7 @@ app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-        // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        audience: GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
