@@ -34,7 +34,7 @@ app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
 //=============================
 // Autenticación de Google
 //=============================
-/* async function verify(token) {
+async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
         audience: GOOGLE_CLIENT_ID,
@@ -119,7 +119,7 @@ app.post('/google', async (req, res) => {
             });
         }
     });
-}); */
+});
 
 
 //=============================
@@ -178,25 +178,25 @@ app.post('/', (req, res) => {
 function obtenerMenu(ROLE) {
 
     var menu = [{
-            titulo: 'Principal',
-            icono: 'mdi mdi-gauge', // material design
-            submenu: [
-                { titulo: 'Dashboard', url: '/dashboard' },
-                { titulo: 'ProgressBar', url: '/progress' },
-                { titulo: 'Gráficas', url: '/graficas1' },
-                { titulo: 'Promesas', url: '/promesas' },
-                { titulo: 'RxJs', url: '/rxjs' }
-            ]
-        },
-        {
-            titulo: 'Mantenimientos',
-            icono: 'mdi mdi-folder-lock-open',
-            submenu: [
-                /* { titulo: 'Usuarios', url: '/usuarios' }, */
-                { titulo: 'Hospitales', url: '/hospitales' },
-                { titulo: 'Médicos', url: '/medicos' }
-            ]
-        }
+        titulo: 'Principal',
+        icono: 'mdi mdi-gauge', // material design
+        submenu: [
+            { titulo: 'Dashboard', url: '/dashboard' },
+            { titulo: 'ProgressBar', url: '/progress' },
+            { titulo: 'Gráficas', url: '/graficas1' },
+            { titulo: 'Promesas', url: '/promesas' },
+            { titulo: 'RxJs', url: '/rxjs' }
+        ]
+    },
+    {
+        titulo: 'Mantenimientos',
+        icono: 'mdi mdi-folder-lock-open',
+        submenu: [
+            /* { titulo: 'Usuarios', url: '/usuarios' }, */
+            { titulo: 'Hospitales', url: '/hospitales' },
+            { titulo: 'Médicos', url: '/medicos' }
+        ]
+    }
     ];
 
     // console.log('ROL: ', ROLE);
