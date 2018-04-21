@@ -1,13 +1,20 @@
 // Requires (librerias)
 var cool = require('cool-ascii-faces');
+const spdy = require('spdy')
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 const path = require('path')
 const PUERTO = require('./config/config').PUERTO;
+const fs = require('fs')
 
 // Inicializar variables
 var app = express();
+
+const options = {
+    key: fs.readFileSync(__dirname + '/SSL/backend-server.key'),
+    cert: fs.readFileSync(__dirname + '/SSL/backend-server.crt')
+}
 
 // Control de acceso HTTP (CORS)
 app.use(function (req, res, next) {
@@ -60,7 +67,6 @@ app.use('/upload', uploadRoutes);
 app.use('/img', imagenesRoutes);
 app.use('/', appRoutes); */
 
-
 app.use(express.static(path.join(__dirname, 'public')))
     .use('/medico', medicoRoutes)
     .use('/hospital', hospitalRoutes)
@@ -70,11 +76,22 @@ app.use(express.static(path.join(__dirname, 'public')))
     .use('/upload', uploadRoutes)
     .use('/img', imagenesRoutes)
     .use('/', appRoutes)
-    .set('views', path.join(__dirname, 'views'))
-    .set('view engine', 'ejs')
+    //.set('views', path.join(__dirname, 'views'))
+    //.set('view engine', 'ejs')
     .get('/', (req, res) => res.render('pages/index'))
     .get('/cool', (req, res) => res.send(cool()))
-    .listen(PUERTO, () => console.log('Express server escuchando en el puerto ' + PUERTO + ': \x1b[32m%s\x1b[0m', 'online'))
+// .listen(PUERTO, () => console.log('Express server escuchando en el puerto ' + PUERTO + ': \x1b[32m%s\x1b[0m', 'online'))
+
+spdy
+    .createServer(options, app)
+    .listen(PUERTO, (error) => {
+        if (error) {
+            console.error(error)
+            return process.exit(1)
+        } else {
+            console.log('Express server escuchando en el puerto ' + PUERTO + ': \x1b[32m%s\x1b[0m', 'online')
+        }
+    })
 
 // Escuchar peticiones
  /* app.listen(5000, () => {
