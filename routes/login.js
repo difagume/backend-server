@@ -32,6 +32,70 @@ app.get('/renuevatoken', mdAutenticacion.verficaToken, (req, res) => {
 
 
 //=============================
+// Autenticación de Facebook
+//=============================
+app.post('/facebook', async (req, res) => {
+
+    var usu = req.body;
+
+    Usuario.findOne({ email: usu.email }, (err, usuarioDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        };
+        if (usuarioDB) {
+            if (usuarioDB.google === false) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error en el login de Facebook',
+                    errors: { message: 'Debe de usar su autenticación normal' }
+                });
+            } else {
+                let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
+                return res.status(200).json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    token: token,
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role)
+                });
+            }
+        } else {
+            // Si el usuario no existe en nuestra base de datos
+            let usuario = new Usuario();
+
+            usuario.nombre = usu.name;
+            usuario.email = usu.email;
+            usuario.img = usu.image;
+            usuario.google = true;
+            usuario.password = ':)';
+
+            usuario.save((err, usuarioDB) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                };
+                let token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: CADUCIDAD_TOKEN });
+                //var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 }); // 4 horas
+
+                return res.status(200).json({
+                    ok: true,
+                    usuario: usuarioDB,
+                    token: token,
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuario.role)
+                });
+            });
+        }
+    });
+});
+
+
+//=============================
 // Autenticación de Google
 //=============================
 async function verify(token) {
